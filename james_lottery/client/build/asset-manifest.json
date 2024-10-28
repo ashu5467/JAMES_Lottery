@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/static/css/main.755e8638.css",
+    "main.js": "/static/js/main.e2ec6077.js",
+    "static/js/453.8ab44547.chunk.js": "/static/js/453.8ab44547.chunk.js",
+    "static/media/lotteryJackpot.png": "/static/media/lotteryJackpot.37f5d2cf6fe51ec6796d.png",
+    "static/media/lotteryjackpot.jpg": "/static/media/lotteryjackpot.7d7eae33780f55450f07.jpg",
+    "static/media/banner2.webp": "/static/media/banner2.5fc29bdefc2e54b88179.webp",
+    "static/media/jackpot_banner.jpg": "/static/media/jackpot_banner.d01ac9927607e7c8fd4b.jpg",
+    "static/media/banner1.webp": "/static/media/banner1.5e30e9c10d930ed67c43.webp",
+    "static/media/banner3.webp": "/static/media/banner3.23670fc5b978cfd8b13f.webp",
+    "static/media/big_win.jpg": "/static/media/big_win.2b51deb52b49437204d7.jpg",
+    "static/media/profile-icon.png": "/static/media/profile-icon.21083e2c6019b25dbbfb.png",
+    "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
+    "static/media/slick.eot": "/static/media/slick.a4e97f5a2a64f0ab1323.eot",
+    "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
+    "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
+    "index.html": "/index.html",
+    "main.755e8638.css.map": "/static/css/main.755e8638.css.map",
+    "main.e2ec6077.js.map": "/static/js/main.e2ec6077.js.map",
+    "453.8ab44547.chunk.js.map": "/static/js/453.8ab44547.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.755e8638.css",
+    "static/js/main.e2ec6077.js"
+  ]
+}

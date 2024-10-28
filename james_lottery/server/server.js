@@ -5,6 +5,7 @@ const lotteryRoutes = require('./routes/lotteryRoutes');
 const userRoutes = require('./routes/userRoutes');
 const resultRoutes = require('./routes/resultRoutes');
 const winnerRoutes = require('./routes/winnerRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -21,6 +22,7 @@ app.use('/api/lotteries', lotteryRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/results', resultRoutes);
 app.use('/api/winners', winnerRoutes);
+app.use("/api/auth", authRoutes);
 
 // Start server
 app.listen(PORT, () => {

@@ -2,19 +2,34 @@ import React, { useState, useEffect } from 'react';
 
 const LotteriesPage = () => {
   const [lotteries, setLotteries] = useState([]);
+  const [filteredLotteries, setFilteredLotteries] = useState([]);
   const [isCreating, setIsCreating] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentLottery, setCurrentLottery] = useState(null);
+  // const [newLottery, setNewLottery] = useState({
+  //   name: '',
+  //   startDate: '',
+  //   endDate: '',
+  //   frequency: 'weekly', 
+  //   status: 'Upcoming',
+  //   participants: 0,
+  //   sales: '$0',
+  //   price: 0,
+  //   prize: 0,
+  // });
   const [newLottery, setNewLottery] = useState({
+    id: null,
     name: '',
-    startDate: '',
-    endDate: '',
+    price: '',
+    description: '',
+    drawDate: '',
+    drawTime: '',
+    frequency: 'Weekly', 
     status: 'Upcoming',
-    participants: 0,
-    sales: '$0',
-    price: 0,
-    prize: 0,
   });
+  
+  
+  const [filter, setFilter] = useState('All'); // New filter state
 
   // Fetch lotteries from the database on component mount
   useEffect(() => {
@@ -24,6 +39,7 @@ const LotteriesPage = () => {
         if (response.ok) {
           const data = await response.json();
           setLotteries(data); // Set the fetched lotteries to state
+          setFilteredLotteries(data); // Initialize filtered lotteries
         } else {
           console.error('Failed to fetch lotteries');
         }
@@ -34,6 +50,41 @@ const LotteriesPage = () => {
 
     fetchLotteries();
   }, []); // Empty dependency array to run once on mount
+
+  useEffect(() => {
+    filterLotteries();
+  }, [filter, lotteries]); // Re-filter when the filter or lotteries change
+
+  const filterLotteries = () => {
+    const today = new Date();
+    let filtered = lotteries;
+  
+    // Check frequency and filter based on it
+    if (filter === 'Today') {
+      filtered = lotteries.filter(lottery => {
+        const startDate = new Date(lottery.startDate);
+        return startDate.toDateString() === today.toDateString();
+      });
+    } else if (filter === 'This Week') {
+      const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+      const endOfWeek = new Date(today.setDate(startOfWeek.getDate() + 6));
+      filtered = lotteries.filter(lottery => {
+        const startDate = new Date(lottery.startDate);
+        return startDate >= startOfWeek && startDate <= endOfWeek && lottery.frequency === 'weekly';
+      });
+    } else if (filter === 'This Month') {
+      const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      filtered = lotteries.filter(lottery => {
+        const startDate = new Date(lottery.startDate);
+        return startDate >= startOfMonth && lottery.frequency === 'monthly';
+      });
+    } else if (filter === 'All') {
+      filtered = lotteries; // If 'All', show all lotteries
+    }
+  
+    setFilteredLotteries(filtered);
+  };
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,7 +98,7 @@ const LotteriesPage = () => {
     e.preventDefault();
     try {
       const response = isEditing
-        ? await fetch(`http://localhost:5000/api/lotteries/${currentLottery._id}`, { // Change to _id
+        ? await fetch(`http://localhost:5000/api/lotteries/${currentLottery._id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -65,12 +116,12 @@ const LotteriesPage = () => {
       if (response.ok) {
         const lotteryData = await response.json();
         if (isEditing) {
-          setLotteries((prev) => prev.map((lottery) => (lottery._id === currentLottery._id ? lotteryData : lottery))); // Change id to _id
+          setLotteries((prev) => prev.map((lottery) => (lottery._id === currentLottery._id ? lotteryData : lottery)));
           setIsEditing(false);
         } else {
           setLotteries((prev) => [...prev, lotteryData]);
         }
-        setNewLottery({ name: '', startDate: '', endDate: '', status: 'Upcoming', participants: 0, sales: '$0', price: 0, prize: 0 });
+        setNewLottery({ name: '', startDate: '', endDate: '', status: 'Upcoming', participants: 0, sales: '$0', price: 0, prize: 0 ,description:'',frequency:'',});
         setIsCreating(false);
       } else {
         console.error('Failed to add or update lottery');
@@ -81,13 +132,12 @@ const LotteriesPage = () => {
   };
   
   const handleEdit = (lottery) => {
-    setCurrentLottery({ id: lottery._id, ...lottery }); // Ensure you include the ID here
+    setCurrentLottery({ id: lottery._id, ...lottery });
     setNewLottery(lottery);
     setIsCreating(true);
     setIsEditing(true);
   };
   
-
   const handleDelete = async (id) => {
     try {
       const response = await fetch(`http://localhost:5000/api/lotteries/${id}`, {
@@ -95,7 +145,7 @@ const LotteriesPage = () => {
       });
   
       if (response.ok) {
-        setLotteries((prev) => prev.filter((lottery) => lottery._id !== id)); // Use _id here as well
+        setLotteries((prev) => prev.filter((lottery) => lottery._id !== id));
       } else {
         console.error('Failed to delete lottery');
       }
@@ -103,11 +153,26 @@ const LotteriesPage = () => {
       console.error('Error:', error);
     }
   };
-  
 
   return (
     <div className="p-6 bg-gray-100">
       <h1 className="text-2xl font-bold mb-4">Lotteries Management</h1>
+
+      {/* Filter Options */}
+      <div className="mb-6">
+        <label htmlFor="filter" className="mr-2">Filter by:</label>
+        <select
+          id="filter"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          className="border rounded p-2"
+        >
+          <option value="All">All</option>
+          <option value="Today">Today</option>
+          <option value="This Week">This Week</option>
+          <option value="This Month">This Month</option>
+        </select>
+      </div>
 
       <div className="mb-6">
         <button onClick={() => { setIsCreating(!isCreating); setIsEditing(false); }} className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-400">
@@ -149,6 +214,19 @@ const LotteriesPage = () => {
             required
             className="border rounded p-2 mb-2 w-full"
           />
+
+
+<label className="block mb-1" htmlFor="frequency">Frequency:</label>
+<select
+  name="frequency"
+  value={newLottery.frequency}
+  onChange={handleChange}
+  className="border rounded p-2 mb-2 w-full"
+>
+  <option value="daily">Daily</option>
+  <option value="weekly">Weekly</option>
+  <option value="monthly">Monthly</option>
+</select>
           
           <label className="block mb-1" htmlFor="participants">Participants:</label>
           <input
@@ -161,6 +239,37 @@ const LotteriesPage = () => {
             className="border rounded p-2 mb-2 w-full"
           />
           
+          <label className="block mb-1" htmlFor="description">Description:</label>
+<textarea
+  name="description"
+  value={newLottery.description}
+  onChange={handleChange}
+  placeholder="Enter lottery description"
+  required
+  className="border rounded p-2 mb-2 w-full"
+/>
+
+<label className="block mb-1" htmlFor="drawDate">Draw Date:</label>
+<input
+  type="date"
+  name="drawDate"
+  value={newLottery.drawDate}
+  onChange={handleChange}
+  required
+  className="border rounded p-2 mb-2 w-full"
+/>
+
+<label className="block mb-1" htmlFor="drawTime">Draw Time:</label>
+<input
+  type="time"
+  name="drawTime"
+  value={newLottery.drawTime}
+  onChange={handleChange}
+  required
+  className="border rounded p-2 mb-2 w-full"
+/>
+
+
           <label className="block mb-1" htmlFor="price">Lottery Price:</label>
           <input
             type="number"
@@ -189,64 +298,37 @@ const LotteriesPage = () => {
         </form>
       )}
 
-      <div className="bg-white p-4 rounded-lg shadow">
-        <h2 className="text-lg font-semibold mb-4">All Lotteries</h2>
-        <table className="min-w-full table-auto">
+      {filteredLotteries.length === 0 ? (
+        <p>No lotteries available for the selected filter.</p>
+      ) : (
+        <table className="min-w-full bg-white border border-gray-200">
           <thead>
             <tr>
-              <th className="px-4 py-2">Name</th>
-              <th className="px-4 py-2">Start Date</th>
-              <th className="px-4 py-2">End Date</th>
-              <th className="px-4 py-2">Status</th>
-              <th className="px-4 py-2">Participants</th>
-              <th className="px-4 py-2">Total Sales</th>
-              <th className="px-4 py-2">Price</th>
-              <th className="px-4 py-2">Prize</th>
-              <th className="px-4 py-2">Actions</th>
+              <th className="border px-4 py-2">Name</th>
+              <th className="border px-4 py-2">Start Date</th>
+              <th className="border px-4 py-2">End Date</th>
+              <th className="border px-4 py-2">Participants</th>
+              <th className="border px-4 py-2">Price</th>
+              <th className="border px-4 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {lotteries.map((lottery) => (
-              <tr key={lottery._id} className="border-t">
-                <td className="px-4 py-2">{lottery.name}</td>
-                <td className="px-4 py-2">{lottery.startDate}</td>
-                <td className="px-4 py-2">{lottery.endDate}</td>
-                <td className="px-4 py-2">
-                  <span
-                    className={`px-2 py-1 rounded ${
-                      lottery.status === 'Active'
-                        ? 'bg-green-100 text-green-700'
-                        : lottery.status === 'Upcoming'
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'bg-red-100 text-red-700'
-                    }`}
-                  >
-                    {lottery.status}
-                  </span>
-                </td>
-                <td className="px-4 py-2">{lottery.participants}</td>
-                <td className="px-4 py-2">{lottery.sales}</td>
-                <td className="px-4 py-2">{lottery.price}</td>
-                <td className="px-4 py-2">{lottery.prize}</td>
-                <td className="px-4 py-2">
-                  <button
-                    onClick={() => handleEdit(lottery)}
-                    className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-400 mr-2"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(lottery._id)}
-                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-400"
-                  >
-                    Delete
-                  </button>
+            {filteredLotteries.map((lottery) => (
+              <tr key={lottery._id}>
+                <td className="border px-4 py-2">{lottery.name}</td>
+                <td className="border px-4 py-2">{new Date(lottery.startDate).toLocaleDateString()}</td>
+                <td className="border px-4 py-2">{new Date(lottery.endDate).toLocaleDateString()}</td>
+                <td className="border px-4 py-2">{lottery.participants}</td>
+                <td className="border px-4 py-2">${lottery.price}</td>
+                <td className="border px-4 py-2">
+                  <button onClick={() => handleEdit(lottery)} className="bg-yellow-500 text-white px-2 py-1 rounded-lg hover:bg-yellow-400">Edit</button>
+                  <button onClick={() => handleDelete(lottery._id)} className="bg-red-500 text-white px-2 py-1 rounded-lg hover:bg-red-400">Delete</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
+      )}
     </div>
   );
 };

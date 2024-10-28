@@ -36,6 +36,8 @@ const LotteriesPage = () => {
     setShowSelectionPage(true); // Show selection page
   };
 
+  console.log('lotteries>>>>> ',lotteries)
+
   return (
     <>
       {showSelectionPage ? (
@@ -69,26 +71,38 @@ const LotteriesPage = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredLotteries.length > 0 ? (
                 filteredLotteries.map((lottery) => (
+                  
                   <div
+                  
                     key={lottery.id}
                     className="bg-gradient-to-r from-yellow-100 to-yellow-200 p-6 rounded-lg shadow-xl transition-transform transform hover:scale-105 hover:shadow-2xl relative border-2 border-yellow-300"
                   >
                     <h3 className="text-2xl font-bold mb-2 text-blue-800">{lottery.name}</h3>
+                    {console.log(lottery.name)}
                     <p className="text-gray-600 mb-4">
                       Price: <span className="text-green-600 font-bold">${lottery.price}</span>
+                      {console.log(lottery.price)}
                     </p>
                     <p className="text-md text-gray-500 mb-4">
-                      Draw Date: <span className="font-semibold">{lottery.drawDate}</span>
+                      Start Date: <span className="font-semibold">{lottery.startDate}</span>
+                      {console.log(lottery.drawDate)}
                     </p>
                     <p className="text-md text-gray-500 mb-4">
-                      Draw Time: <span className="font-semibold">{lottery.drawTime}</span>
+                      End Date: <span className="font-semibold">{lottery.endDate}</span>
+                      {console.log(lottery.endDate)}
                     </p>
                     <p className="text-md text-gray-500 mb-4">
                       Frequency: <span className="font-semibold">{lottery.frequency}</span>
+                      {console.log(lottery.frequency)}
                     </p>
                     <p className="text-md text-gray-500 mb-4">
                       Description: <span className="font-semibold">{lottery.description}</span>
+                      {console.log(lottery.description)}
                     </p>
+                    <p className="text-md text-gray-500 mb-4">
+                      Prize: <span className="text-green-600 font-bold">${lottery.prize}</span> {/* New prize field */}
+                    </p>
+
                     <button
                       className="bg-gradient-to-r from-green-400 to-green-600 text-white p-3 rounded-lg mt-4 flex items-center justify-center hover:opacity-90 transition"
                       onClick={() => handleSelectLottery(lottery)}

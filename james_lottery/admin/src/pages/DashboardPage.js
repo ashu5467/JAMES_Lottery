@@ -1,68 +1,66 @@
-    import React from 'react';
+import React from 'react';
 
-    const DashboardPage = () => {
-    return (
-        <div className="p-6 bg-gray-100">
-        <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>
+const DashboardPage = () => {
+  return (
+    <div className="bg-gradient-to-b from-blue-600 to-indigo-800 p-8 min-h-screen">
+      <h1 className="text-5xl font-extrabold text-white mb-8 drop-shadow-lg">Admin Dashboard</h1>
 
-        {/* Key Metrics */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white p-4 rounded-lg shadow">
-            <h2 className="text-lg font-semibold">Total Lotteries</h2>
-            <p className="text-3xl">45</p>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow">
-            <h2 className="text-lg font-semibold">Total Users</h2>
-            <p className="text-3xl">1,250</p>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow">
-            <h2 className="text-lg font-semibold">Total Sales</h2>
-            <p className="text-3xl">$25,400</p>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow">
-            <h2 className="text-lg font-semibold">Active Lotteries</h2>
-            <p className="text-3xl">10</p>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow">
-            <h2 className="text-lg font-semibold">Upcoming Lotteries</h2>
-            <p className="text-3xl">3</p>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow">
-            <h2 className="text-lg font-semibold">Recent Winners</h2>
-            <p className="text-3xl">5</p>
-            </div>
+      {/* Key Metrics */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+        {[
+          { title: "Total Lotteries", value: 45, color: "bg-blue-200" },
+          { title: "Total Users", value: 1250, color: "bg-green-200" },
+          { title: "Total Sales", value: "$25,400", color: "bg-yellow-200" },
+          { title: "Active Lotteries", value: 10, color: "bg-red-200" },
+          { title: "Upcoming Lotteries", value: 3, color: "bg-purple-200" },
+          { title: "Recent Winners", value: 5, color: "bg-pink-200" },
+        ].map((metric, index) => (
+          <div key={index} className={`${metric.color} p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105`}>
+            <h2 className="text-xl font-semibold text-gray-800">{metric.title}</h2>
+            <p className="text-4xl font-bold text-gray-900">{metric.value}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Quick Actions */}
+      <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
+        <h2 className="text-xl font-semibold mb-4 text-gray-800">Quick Actions</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[
+            "Create New Lottery",
+            "View Lotteries",
+            "Manage Users",
+            "View Reports",
+            "Announce Results"
+          ].map((action, index) => (
+            <button
+              key={index}
+              className="bg-gradient-to-r from-teal-400 to-cyan-500 text-white px-5 py-3 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
+            >
+              {action}
+            </button>
+          ))}
         </div>
+      </div>
 
-        {/* Quick Actions */}
-        <div className="bg-white p-4 rounded-lg shadow mb-8">
-            <h2 className="text-lg font-semibold mb-4">Quick Actions</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-400">Create New Lottery</button>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-400">View Lotteries</button>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-400">Manage Users</button>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-400">View Reports</button>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-400">Announce Results</button>
-            </div>
-        </div>
+      {/* Recent Activity */}
+      <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
+        <h2 className="text-xl font-semibold mb-4 text-gray-800">Recent Activity</h2>
+        <ul className="list-disc ml-4 space-y-2">
+          <li className="text-gray-700">Lottery "Christmas Special" created on 20th October</li>
+          <li className="text-gray-700">User "John Doe" registered on 19th October</li>
+          <li className="text-gray-700">Winner "Jane Smith" declared for Lottery "Summer Bonanza"</li>
+          <li className="text-gray-700">Lottery "Halloween Spooktacular" closed with total sales of $5000</li>
+        </ul>
+      </div>
 
-        {/* Recent Activity */}
-        <div className="bg-white p-4 rounded-lg shadow mb-8">
-            <h2 className="text-lg font-semibold mb-4">Recent Activity</h2>
-            <ul className="list-disc ml-4">
-            <li>Lottery "Christmas Special" created on 20th October</li>
-            <li>User "John Doe" registered on 19th October</li>
-            <li>Winner "Jane Smith" declared for Lottery "Summer Bonanza"</li>
-            <li>Lottery "Halloween Spooktacular" closed with total sales of $5000</li>
-            </ul>
-        </div>
+      {/* Graphs (Placeholder for future enhancement) */}
+      <div className="bg-white p-6 rounded-lg shadow-lg">
+        <h2 className="text-xl font-semibold mb-4 text-gray-800">Sales Analytics (Coming Soon)</h2>
+        <p className="text-gray-600">Graph showing sales over time will be displayed here.</p>
+      </div>
+    </div>
+  );
+};
 
-        {/* Graphs (Placeholder for future enhancement) */}
-        <div className="bg-white p-4 rounded-lg shadow">
-            <h2 className="text-lg font-semibold mb-4">Sales Analytics (Coming Soon)</h2>
-            <p>Graph showing sales over time will be displayed here.</p>
-        </div>
-        </div>
-    );
-    };
-
-    export default DashboardPage;
+export default DashboardPage;

@@ -9,6 +9,8 @@ const lotterySchema = new mongoose.Schema({
   sales: { type: String, default: '$0' },
   price: { type: String, required: true },
   prize: { type: String, required: true },
+  frequency: { type: String, required: true }, // New field for frequency
+  description: { type: String, required: true }, // New field for description
 });
 
 module.exports = mongoose.model('Lottery', lotterySchema);
