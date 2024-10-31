@@ -9,7 +9,7 @@ const CartPage = () => {
   // Calculate total amount whenever cartItems changes
   useEffect(() => {
     const updatedTotal = cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
+      (total, item) => total + (item.price || 0) * item.quantity,
       0
     );
     setTotalAmount(updatedTotal);
@@ -51,7 +51,7 @@ const CartPage = () => {
             >
               <div>
                 <h3 className="text-xl font-bold text-blue-800">{item.name}</h3>
-                <p className="text-gray-600">Price: ${item.price.toFixed(2)}</p>
+                <p className="text-gray-600">Price: ${item.price}</p>
                 <p className="text-gray-600">Quantity: {item.quantity}</p>
 
                
@@ -74,7 +74,7 @@ const CartPage = () => {
           ))}
 
           <div className="text-right mt-4">
-            <h2 className="text-2xl font-bold text-blue-800">Total: ${totalAmount.toFixed(2)}</h2>
+            <h2 className="text-2xl font-bold text-blue-800">Total: ${totalAmount}</h2>
             <button
               className="bg-green-500 text-white px-6 py-3 rounded mt-4 hover:bg-green-700 transition-colors"
               onClick={handleCheckout}

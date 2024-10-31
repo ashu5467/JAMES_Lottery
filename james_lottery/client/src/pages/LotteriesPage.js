@@ -3,6 +3,7 @@ import { fetchLotteries } from "../services/lotteryService";
 import { FaTicketAlt } from "react-icons/fa";
 import { CartContext } from "../context/CartContext"; // Import CartContext
 import LotterySelectionPage from './LotterySelectionPage'; // Import the new LotterySelectionPage
+import { Link } from 'react-router-dom'; // Import Link for navigation
 
 const LotteriesPage = () => {
   const { addToCart } = useContext(CartContext); // Use context to manage cart
@@ -36,8 +37,6 @@ const LotteriesPage = () => {
     setShowSelectionPage(true); // Show selection page
   };
 
-  console.log('lotteries>>>>> ',lotteries)
-
   return (
     <>
       {showSelectionPage ? (
@@ -68,54 +67,49 @@ const LotteriesPage = () => {
               </select>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredLotteries.length > 0 ? (
-                filteredLotteries.map((lottery) => (
-                  
-                  <div
-                  
-                    key={lottery.id}
-                    className="bg-gradient-to-r from-yellow-100 to-yellow-200 p-6 rounded-lg shadow-xl transition-transform transform hover:scale-105 hover:shadow-2xl relative border-2 border-yellow-300"
-                  >
-                    <h3 className="text-2xl font-bold mb-2 text-blue-800">{lottery.name}</h3>
-                    {console.log(lottery.name)}
-                    <p className="text-gray-600 mb-4">
-                      Price: <span className="text-green-600 font-bold">${lottery.price}</span>
-                      {console.log(lottery.price)}
-                    </p>
-                    <p className="text-md text-gray-500 mb-4">
-                      Start Date: <span className="font-semibold">{lottery.startDate}</span>
-                      {console.log(lottery.drawDate)}
-                    </p>
-                    <p className="text-md text-gray-500 mb-4">
-                      End Date: <span className="font-semibold">{lottery.endDate}</span>
-                      {console.log(lottery.endDate)}
-                    </p>
-                    <p className="text-md text-gray-500 mb-4">
-                      Frequency: <span className="font-semibold">{lottery.frequency}</span>
-                      {console.log(lottery.frequency)}
-                    </p>
-                    <p className="text-md text-gray-500 mb-4">
-                      Description: <span className="font-semibold">{lottery.description}</span>
-                      {console.log(lottery.description)}
-                    </p>
-                    <p className="text-md text-gray-500 mb-4">
-                      Prize: <span className="text-green-600 font-bold">${lottery.prize}</span> {/* New prize field */}
-                    </p>
-
-                    <button
-                      className="bg-gradient-to-r from-green-400 to-green-600 text-white p-3 rounded-lg mt-4 flex items-center justify-center hover:opacity-90 transition"
-                      onClick={() => handleSelectLottery(lottery)}
+            <div className="relative flex justify-center">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredLotteries.length > 0 ? (
+                  filteredLotteries.map((lottery) => (
+                    <div
+                      key={lottery.id}
+                      className="card bg-yellow-50 border-2 border-yellow-500 p-4 shadow-lg"
+                      style={{ borderRadius: '30px 30px 0 0', margin: '0 8px' }} // Add margin for spacing
                     >
-                      <FaTicketAlt className="mr-2" /> Add to Cart
-                    </button>
-                  </div>
-                ))
-              ) : (
-                <p className="text-lg text-white text-center col-span-3">
-                  No lotteries available at the moment. Please check back later!
-                </p>
-              )}
+                      <h3 className="text-2xl font-bold text-center mb-2 text-blue-800" style={{ fontFamily: 'Cinzel, serif' }}>
+                        {lottery.name}
+                      </h3>
+                      <p className="text-lg text-center mb-2" style={{ fontFamily: 'Cinzel, serif' }}>
+                        Win First Prize!
+                      </p>
+                      <p className="text-3xl font-bold text-green-600 text-center mb-4">{`$${lottery.prize}`}</p>
+                      <button
+                        className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white w-full px-4 py-2 rounded-lg transform transition-transform duration-200 hover:scale-105"
+                        onClick={() => handleSelectLottery(lottery)}
+                      >
+                        Add to Cart
+                      </button>
+                      <div className="border-t-2 border-dashed my-4 border-gray-300"></div>
+                      <Link
+                        to="/cart"
+                        className="bg-gradient-to-r from-green-400 to-green-600 text-white w-full px-4 py-2 rounded-lg inline-block transform transition-transform duration-200 hover:scale-105"
+                      >
+                        <FaTicketAlt className="inline mr-2" /> Buy Now
+                      </Link>
+                      <p className="text-xs text-center text-gray-600 mt-2" style={{ fontFamily: 'Cinzel, serif' }}>
+                        Draw Date: {lottery.startDate} <br />
+                        End Date: {lottery.endDate} <br />
+                        Frequency: {lottery.frequency}<br />
+                        Price: <span className="font-bold text-green-600">{lottery.price}</span> <br />
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-lg text-white text-center col-span-3">
+                    No lotteries available at the moment. Please check back later!
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>

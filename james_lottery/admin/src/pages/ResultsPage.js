@@ -10,7 +10,6 @@ const ResultsPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentResult, setCurrentResult] = useState(null);
 
-  // Fetch results from the database on component mount
   useEffect(() => {
     const fetchResults = async () => {
       try {
@@ -206,28 +205,26 @@ const ResultsPage = () => {
                 <td className="px-4 py-2">{result.lotteryName}</td>
                 <td className="px-4 py-2">{result.resultDate}</td>
                 <td className="px-4 py-2">
-                  {result.winners.map((winner, index) => (
-                    <div key={index} className="mb-2">
-                      <p>{winner.name}</p>
-                      <p className="text-sm text-gray-500">Ticket: {winner.ticketNumber}</p>
-                      <p className="text-sm text-gray-500">Prize: {winner.prize}</p>
-                    </div>
-                  ))}
+                  {result.winners && Array.isArray(result.winners) && result.winners.length > 0 ? (
+                    result.winners.map((winner, index) => (
+                      <div key={index} className="mb-2">
+                        <p>{winner.name}</p>
+                        <p className="text-sm text-gray-500">Ticket: {winner.ticketNumber}</p>
+                        <p className="text-sm text-gray-500">Prize: {winner.prize}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p>No winners</p>
+                  )}
                 </td>
                 <td className="px-4 py-2">
-                  <button onClick={() => handleEdit(result)} className="text-blue-500 hover:underline mr-2">Edit</button>
-                  <button onClick={() => handleDelete(result._id)} className="text-red-500 hover:underline">Delete</button>
+                  <button onClick={() => handleEdit(result)} className="bg-yellow-500 text-white px-2 py-1 rounded-lg hover:bg-yellow-400 mr-2">Edit</button>
+                  <button onClick={() => handleDelete(result._id)} className="bg-red-500 text-white px-2 py-1 rounded-lg hover:bg-red-400">Delete</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
-
-      {/* Placeholder for Future Enhancements */}
-      <div className="bg-white p-4 rounded-lg shadow mt-6">
-        <h2 className="text-lg font-semibold mb-4">Recent Activity (Coming Soon)</h2>
-        <p>Details about recent result-related activities will appear here.</p>
       </div>
     </div>
   );

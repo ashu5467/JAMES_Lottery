@@ -6,17 +6,7 @@ const LotteriesPage = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentLottery, setCurrentLottery] = useState(null);
-  // const [newLottery, setNewLottery] = useState({
-  //   name: '',
-  //   startDate: '',
-  //   endDate: '',
-  //   frequency: 'weekly', 
-  //   status: 'Upcoming',
-  //   participants: 0,
-  //   sales: '$0',
-  //   price: 0,
-  //   prize: 0,
-  // });
+  
   const [newLottery, setNewLottery] = useState({
     id: null,
     name: '',
@@ -26,8 +16,11 @@ const LotteriesPage = () => {
     drawTime: '',
     frequency: 'Weekly', 
     status: 'Upcoming',
+    startNumber: '',
+    endNumber: '',
+    type: '', // New field for type
+    prefix: '', // New field for prefix
   });
-  
   
   const [filter, setFilter] = useState('All'); // New filter state
 
@@ -58,7 +51,7 @@ const LotteriesPage = () => {
   const filterLotteries = () => {
     const today = new Date();
     let filtered = lotteries;
-  
+
     // Check frequency and filter based on it
     if (filter === 'Today') {
       filtered = lotteries.filter(lottery => {
@@ -81,10 +74,9 @@ const LotteriesPage = () => {
     } else if (filter === 'All') {
       filtered = lotteries; // If 'All', show all lotteries
     }
-  
+
     setFilteredLotteries(filtered);
   };
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -112,7 +104,7 @@ const LotteriesPage = () => {
             },
             body: JSON.stringify(newLottery),
           });
-  
+
       if (response.ok) {
         const lotteryData = await response.json();
         if (isEditing) {
@@ -121,7 +113,21 @@ const LotteriesPage = () => {
         } else {
           setLotteries((prev) => [...prev, lotteryData]);
         }
-        setNewLottery({ name: '', startDate: '', endDate: '', status: 'Upcoming', participants: 0, sales: '$0', price: 0, prize: 0 ,description:'',frequency:'',});
+        // Reset form fields including type and prefix
+        setNewLottery({ 
+          id: null,
+          name: '',
+          price: '',
+          description: '',
+          drawDate: '',
+          drawTime: '',
+          frequency: 'Weekly', 
+          status: 'Upcoming',
+          startNumber: '',
+          endNumber: '',
+          type: '', // Reset type
+          prefix: '', // Reset prefix
+        });
         setIsCreating(false);
       } else {
         console.error('Failed to add or update lottery');
@@ -143,7 +149,7 @@ const LotteriesPage = () => {
       const response = await fetch(`http://localhost:5000/api/lotteries/${id}`, {
         method: 'DELETE',
       });
-  
+
       if (response.ok) {
         setLotteries((prev) => prev.filter((lottery) => lottery._id !== id));
       } else {
@@ -215,18 +221,17 @@ const LotteriesPage = () => {
             className="border rounded p-2 mb-2 w-full"
           />
 
-
-<label className="block mb-1" htmlFor="frequency">Frequency:</label>
-<select
-  name="frequency"
-  value={newLottery.frequency}
-  onChange={handleChange}
-  className="border rounded p-2 mb-2 w-full"
->
-  <option value="daily">Daily</option>
-  <option value="weekly">Weekly</option>
-  <option value="monthly">Monthly</option>
-</select>
+          <label className="block mb-1" htmlFor="frequency">Frequency:</label>
+          <select
+            name="frequency"
+            value={newLottery.frequency}
+            onChange={handleChange}
+            className="border rounded p-2 mb-2 w-full"
+          >
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+          </select>
           
           <label className="block mb-1" htmlFor="participants">Participants:</label>
           <input
@@ -234,101 +239,95 @@ const LotteriesPage = () => {
             name="participants"
             value={newLottery.participants}
             onChange={handleChange}
-            placeholder="Enter number of participants"
             required
             className="border rounded p-2 mb-2 w-full"
           />
-          
-          <label className="block mb-1" htmlFor="description">Description:</label>
-<textarea
-  name="description"
-  value={newLottery.description}
-  onChange={handleChange}
-  placeholder="Enter lottery description"
-  required
-  className="border rounded p-2 mb-2 w-full"
-/>
 
-<label className="block mb-1" htmlFor="drawDate">Draw Date:</label>
-<input
-  type="date"
-  name="drawDate"
-  value={newLottery.drawDate}
-  onChange={handleChange}
-  required
-  className="border rounded p-2 mb-2 w-full"
-/>
-
-<label className="block mb-1" htmlFor="drawTime">Draw Time:</label>
-<input
-  type="time"
-  name="drawTime"
-  value={newLottery.drawTime}
-  onChange={handleChange}
-  required
-  className="border rounded p-2 mb-2 w-full"
-/>
-
-
-          <label className="block mb-1" htmlFor="price">Lottery Price:</label>
+          <label className="block mb-1" htmlFor="price">Price:</label>
           <input
             type="number"
             name="price"
             value={newLottery.price}
             onChange={handleChange}
-            placeholder="Enter lottery price (e.g., 10)"
             required
             className="border rounded p-2 mb-2 w-full"
           />
           
-          <label className="block mb-1" htmlFor="prize">Lottery Prize:</label>
-          <input
-            type="number"
-            name="prize"
-            value={newLottery.prize}
+          <label className="block mb-1" htmlFor="description">Description:</label>
+          <textarea
+            name="description"
+            value={newLottery.description}
             onChange={handleChange}
-            placeholder="Enter lottery prize (e.g., 1000)"
             required
             className="border rounded p-2 mb-2 w-full"
           />
           
-          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-400">
-            {isEditing ? 'Update Lottery' : 'Add Lottery'}
+          <label className="block mb-1" htmlFor="drawDate">Draw Date:</label>
+          <input
+            type="date"
+            name="drawDate"
+            value={newLottery.drawDate}
+            onChange={handleChange}
+            required
+            className="border rounded p-2 mb-2 w-full"
+          />
+          
+          <label className="block mb-1" htmlFor="drawTime">Draw Time:</label>
+          <input
+            type="time"
+            name="drawTime"
+            value={newLottery.drawTime}
+            onChange={handleChange}
+            required
+            className="border rounded p-2 mb-2 w-full"
+          />
+
+          <label className="block mb-1" htmlFor="type">Type:</label>
+          <input
+            type="text"
+            name="type"
+            value={newLottery.type}
+            onChange={handleChange}
+            placeholder="Enter lottery type"
+            required
+            className="border rounded p-2 mb-2 w-full"
+          />
+          
+          <label className="block mb-1" htmlFor="prefix">Prefix:</label>
+          <input
+            type="text"
+            name="prefix"
+            value={newLottery.prefix}
+            onChange={handleChange}
+            placeholder="Enter lottery prefix"
+            required
+            className="border rounded p-2 mb-2 w-full"
+          />
+
+          <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-400">
+            {isEditing ? 'Update Lottery' : 'Create Lottery'}
           </button>
         </form>
       )}
 
-      {filteredLotteries.length === 0 ? (
-        <p>No lotteries available for the selected filter.</p>
-      ) : (
-        <table className="min-w-full bg-white border border-gray-200">
-          <thead>
-            <tr>
-              <th className="border px-4 py-2">Name</th>
-              <th className="border px-4 py-2">Start Date</th>
-              <th className="border px-4 py-2">End Date</th>
-              <th className="border px-4 py-2">Participants</th>
-              <th className="border px-4 py-2">Price</th>
-              <th className="border px-4 py-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredLotteries.map((lottery) => (
-              <tr key={lottery._id}>
-                <td className="border px-4 py-2">{lottery.name}</td>
-                <td className="border px-4 py-2">{new Date(lottery.startDate).toLocaleDateString()}</td>
-                <td className="border px-4 py-2">{new Date(lottery.endDate).toLocaleDateString()}</td>
-                <td className="border px-4 py-2">{lottery.participants}</td>
-                <td className="border px-4 py-2">${lottery.price}</td>
-                <td className="border px-4 py-2">
-                  <button onClick={() => handleEdit(lottery)} className="bg-yellow-500 text-white px-2 py-1 rounded-lg hover:bg-yellow-400">Edit</button>
-                  <button onClick={() => handleDelete(lottery._id)} className="bg-red-500 text-white px-2 py-1 rounded-lg hover:bg-red-400">Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      <div>
+        <h2 className="text-xl font-semibold mb-4">Lottery List</h2>
+        <ul>
+          {filteredLotteries.map((lottery) => (
+            <li key={lottery._id} className="flex justify-between items-center bg-white p-2 rounded-lg mb-2 shadow">
+              <span>{lottery.name}</span>
+              <div>
+                <button onClick={() => handleEdit(lottery)} className="bg-yellow-500 text-white px-2 py-1 rounded-lg mr-2 hover:bg-yellow-400">
+                  Edit
+                </button>
+                <button onClick={() => handleDelete(lottery._id)} className="bg-red-500 text-white px-2 py-1 rounded-lg hover:bg-red-400">
+                  Delete
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

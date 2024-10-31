@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  //name: { type: String, required: true }, // Adding name field
-  username: { type: String, required: true },
-  email: { type: String, required: true },
+  name: { type: String, required: true, trim: true },
+  username: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  //role: { type: String, default: 'user' }, // Role can be 'admin' or 'user'
-  //registrationDate: { type: Date}, // Adding registration date field
-  //status: { type: String, default: 'Active' }, // Adding status field
+  role: { type: String, enum: ['user', 'admin'], default: 'user' },
+  //registrationDate: { type: Date, default: Date.now },
+  status: { type: String, enum: ['Active', 'Inactive', 'Banned'], default: 'Active' },
+  profilePhoto: { type: String, default: '' } // Store URL/path of the profile photo
 });
 
 module.exports = mongoose.model('User', userSchema);
