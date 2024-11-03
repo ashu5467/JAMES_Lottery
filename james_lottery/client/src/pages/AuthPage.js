@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext'; // Import the Auth context
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const AuthPage = () => {
-  const { isLoggedIn, setIsLoggedIn, username, setUsername } = useAuth(); // Access context values
+  const { isLoggedIn, username, login, logout } = useAuth(); // Correctly access context values
   const navigate = useNavigate(); // Initialize navigate
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -22,26 +22,14 @@ const AuthPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const response = await axios.post(`http://localhost:5000/api/auth/${isLogin ? "login" : "register"}`, formData);
+      console.log(`${isLogin ? "Login" : "Registration"} successful`, response.data);
       if (isLogin) {
-        // Login
-        const response = await axios.post("http://localhost:5000/api/auth/login", {
-          username: formData.username,
-          password: formData.password,
-        });
-        console.log("Login successful", response.data);
-        setIsLoggedIn(true); // Set logged-in state to true
-        setUsername(formData.username); // Store the username
-        // Redirect to home page
+        // Login with response
+        login({ id: response.data.userId, username: formData.username, token: response.data.token });
         navigate("/", { state: { username: formData.username } });
       } else {
-        // Register
-        const response = await axios.post("http://localhost:5000/api/auth/register", {
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-        });
-        console.log("Registration successful", response.data);
-        setIsLogin(true); // Switch to login after registration
+        setIsLogin(true);
       }
     } catch (error) {
       console.error("Error:", error.response ? error.response.data : error.message);
@@ -56,8 +44,8 @@ const AuthPage = () => {
           <h2 className="text-3xl font-bold mb-6">Welcome, {username}!</h2>
           <button
             onClick={() => {
-              setIsLoggedIn(false); // Log the user out
-              setUsername(""); // Clear the username
+              logout(); // Call the logout function from context
+              navigate("/auth"); // Optionally redirect to auth page after logout
             }}
             className="bg-red-500 text-white py-2 px-4 rounded-lg hover:opacity-90 transition"
           >

@@ -6,7 +6,7 @@ import DashboardPage from './pages/DashboardPage';
 import LotteriesPage from './pages/LotteriesPage';
 import UsersPage from './pages/UsersPage';
 import ResultsPage from './pages/ResultsPage';
-import ReportsPage from './pages/ReportsPage';
+import WinnerPage from './pages/WinnerPage';
 import LoginPage from './pages/LoginPage';
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
             <Route path="/lotteries" element={<LotteriesPage />} />
             <Route path="/users" element={<UsersPage />} />
             <Route path="/results" element={<ResultsPage />} />
-            <Route path="/reports" element={<ReportsPage />} />
+            <Route path="/winners" element={<WinnerPage />} />
             <Route path="/login" element={<LoginPage />} />
           </Routes>
         </main>

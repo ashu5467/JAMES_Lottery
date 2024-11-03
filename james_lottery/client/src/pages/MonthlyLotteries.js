@@ -12,6 +12,8 @@ const MonthlyLotteries = () => {
   const { addToCart } = useContext(CartContext);
   const [lotteries, setLotteries] = useState([]); // State to hold fetched lottery data
   const [loading, setLoading] = useState(true); // State to manage loading status
+  const [selectedLotteries, setSelectedLotteries] = useState([]);
+  const [showSelectionPage, setShowSelectionPage] = useState(false);
 
   // Fetch lottery data on component mount
   useEffect(() => {
@@ -29,6 +31,11 @@ const MonthlyLotteries = () => {
     fetchLotteryData(); // Call the fetch function
   }, []);
 
+
+  const handleSelectLottery = (lottery) => {
+    setSelectedLotteries((prev) => [...prev, lottery]); // Add to selected lotteries
+    setShowSelectionPage(true); // Show selection page
+  };
   const handleAddToCart = (lottery) => {
     addToCart(lottery);
   };
@@ -57,7 +64,7 @@ const MonthlyLotteries = () => {
           centerSlidePercentage={33.33} // Adjust to display 3 cards
         >
           {lotteries.map((lottery) => (
-            <div key={lottery.id} className="card bg-yellow-50 border-2 border-yellow-500 p-4 shadow-lg ticket">
+            <div key={lottery._id} className="card bg-yellow-50 border-2 border-yellow-500 p-4 shadow-lg ticket">
               <h3 className="text-2xl font-bold text-center mb-2 text-blue-800" style={{ fontFamily: 'Cinzel, serif' }}>
                 {lottery.name}
               </h3>
@@ -66,7 +73,7 @@ const MonthlyLotteries = () => {
               </p>
               <p className="text-3xl font-bold text-green-600 text-center mb-4">{`$${lottery.prize}`}</p>
               <button
-                onClick={() => handleAddToCart(lottery)}
+                onClick={() => handleSelectLottery(lottery)}
                 className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white w-full px-4 py-2 rounded-lg transform transition-transform duration-200 hover:scale-105"
               >
                 Add to Cart

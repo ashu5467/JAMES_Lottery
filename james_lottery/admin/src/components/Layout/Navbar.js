@@ -10,7 +10,7 @@ const Navbar = () => {
         </div>
 
         <div className="space-x-6">
-          {['Dashboard', 'Lotteries', 'Users', 'Results', 'Reports'].map((option, index) => (
+          {['Dashboard', 'Lotteries', 'Users', 'Results', 'Winners'].map((option, index) => (
             <Link
               key={index}
               to={`/${option.toLowerCase()}`}

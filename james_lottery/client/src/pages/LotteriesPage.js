@@ -42,18 +42,19 @@ const LotteriesPage = () => {
       {showSelectionPage ? (
         <LotterySelectionPage selectedLotteries={selectedLotteries} addToCart={addToCart} />
       ) : (
-        <div className="bg-gradient-to-b from-blue-500 to-purple-500 min-h-screen py-10">
+        <div className="bg-gradient-to-b from-blue-100 to-purple-200 min-h-screen py-10">
+
           <div className="container mx-auto px-4">
-            <h1 className="text-5xl font-extrabold text-white mb-10 text-center drop-shadow-lg">
+          <h1 className="text-5xl font-extrabold text-gray-800 mb-10 text-center drop-shadow-lg">
               Available Lotteries
             </h1>
-            <p className="text-lg text-white text-center mb-8">
+            <p className="text-lg text-gray-800 text-center mb-8">
               Join the excitement and stand a chance to win amazing prizes! Check out our latest lotteries below.
             </p>
 
             {/* Filter Options */}
             <div className="mb-6 text-center">
-              <label className="text-white font-semibold mr-2" htmlFor="filter">Filter by:</label>
+            <label className="text-gray-800 font-semibold mr-2" htmlFor="filter">Filter by:</label>
               <select
                 id="filter"
                 className="bg-white text-gray-700 p-2 rounded"
@@ -72,7 +73,7 @@ const LotteriesPage = () => {
                 {filteredLotteries.length > 0 ? (
                   filteredLotteries.map((lottery) => (
                     <div
-                      key={lottery.id}
+                      key={lottery._id}
                       className="card bg-yellow-50 border-2 border-yellow-500 p-4 shadow-lg"
                       style={{ borderRadius: '30px 30px 0 0', margin: '0 8px' }} // Add margin for spacing
                     >

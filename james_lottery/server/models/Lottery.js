@@ -15,6 +15,7 @@ const lotterySchema = new mongoose.Schema({
   endNumber: { type: Number, required: true }, 
   type: { type: String, required: true },
   prefix: { type: String, required: true },// New field for the ending lottery card number
+  lastTicketNumber: { type: Number, default: 0 },
 });
 
 module.exports = mongoose.model('Lottery', lotterySchema);

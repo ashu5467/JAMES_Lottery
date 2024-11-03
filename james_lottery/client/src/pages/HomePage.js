@@ -18,6 +18,9 @@ import FAQ from "../components/FAQ";
 import UpcomingAttractions from "../components/UpcomingAttractions";
 import MonthlyLotteries from "./MonthlyLotteries";
 import resultImg from '../assets/showresultimg.jpg'
+import ban1 from '../assets/ban1.jpg';
+import ban2 from '../assets/ban2.png';
+import ban3 from '../assets/ban3.jpg'
 
 const HomePage = () => {
   // Slider settings
@@ -37,7 +40,7 @@ const HomePage = () => {
     speed: 500,
     autoplay: true,
     autoplaySpeed: 2000,
-    slidesToShow: 3,
+    slidesToShow: 1,
     slidesToScroll: 1,
     responsive: [
       {
@@ -99,21 +102,22 @@ const HomePage = () => {
 
         <UpcomingAttractions/>
 
-        {/* Sliding Images Section */}
-        <section className="mb-16">
-          <h2 className="text-4xl font-extrabold text-yellow-300 mb-8 text-center"></h2>
-          <Slider {...slideSettings}>
-            <div>
-              <img src={banner4} alt="Slide 1" className="w-full h-40 object-cover rounded-lg" />
-            </div>
-            <div>
-              <img src={banner5} alt="Slide 2" className="w-full h-40 object-cover rounded-lg" />
-            </div>
-            <div>
-              <img src={banner6} alt="Slide 3" className="w-full h-40 object-cover rounded-lg" />
-            </div>
-          </Slider>
-        </section>
+       {/* Sliding Images Section */}
+<section className="mb-16 w-full">
+  <h2 className="text-4xl font-extrabold text-yellow-300 mb-8 text-center"></h2>
+  <Slider {...slideSettings}>
+    <div>
+      <img src={ban1} alt="Slide 1" className="w-full h-100 object-cover rounded-lg" /> {/* Increased height */}
+    </div>
+    <div>
+      <img src={ban2} alt="Slide 2" className="w-full h-100 object-cover rounded-lg" /> {/* Increased height */}
+    </div>
+    <div>
+      <img src={ban3} alt="Slide 3" className="w-full h-100 object-cover rounded-lg" /> {/* Increased height */}
+    </div>
+  </Slider>
+</section>
+
         <MonthlyLotteries/>
 
       

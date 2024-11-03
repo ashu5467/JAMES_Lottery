@@ -2,7 +2,15 @@ import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-b from-gray-800 to-gray-900 text-white py-10">
+    <footer className="bg-gradient-to-b from-gray-800 to-gray-900 text-white py-10 relative">
+      {/* Crisscross Upper Border */}
+      <div
+        className="absolute top-0 left-0 w-full h-8 bg-repeat-x"
+        style={{
+          backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="8"><path d="M0 0L100 8M100 0L0 8" stroke="%23ffffff" stroke-width="1" fill="none"/></svg>')`
+        }}
+      />
+
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Company Info */}
         <div>

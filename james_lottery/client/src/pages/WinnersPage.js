@@ -1,115 +1,72 @@
-import { FaUserTie } from "react-icons/fa";
-import { GiFemale } from "react-icons/gi"; // A different female icon
-import Slider from "react-slick"; // Import the slider component
-import "slick-carousel/slick/slick.css"; // Import slick styles
-import "slick-carousel/slick/slick-theme.css"; // Import slick theme styles
-import { useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
 const WinnersPage = () => {
-  // Sample winners data
-  const winners = [
-    {
-      name: "John Doe",
-      lottery: "Mega Lottery",
-      prize: "$1,000,000",
-      gender: "male",
-    },
-    {
-      name: "Jane Smith",
-      lottery: "Super Jackpot",
-      prize: "$500,000",
-      gender: "female",
-    },
-    {
-      name: "Alice Johnson",
-      lottery: "Daily Lottery",
-      prize: "$10,000",
-      gender: "female",
-    },
-    {
-      name: "Bob Brown",
-      lottery: "Lucky Draw",
-      prize: "$250,000",
-      gender: "male",
-    },
-    {
-      name: "Emma Wilson",
-      lottery: "Mega Lottery",
-      prize: "$750,000",
-      gender: "female",
-    },
-  ];
+  const [winners, setWinners] = useState([]);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
 
-  // Slider settings
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    autoplay: true, // Enable autoplay
-    autoplaySpeed: 800, // Duration of each slide
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    centerMode: true, // Enable center mode
-    centerPadding: "40px", // Space around the centered card
+  const fetchWinners = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/winners'); 
+      if (!response.ok) {
+        setError('Failed to fetch winners.');
+        setLoading(false);
+        return;
+      }
+      const data = await response.json();
+      setWinners(data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching winners:', error);
+      setError('An error occurred while fetching winners.');
+      setLoading(false);
+    }
   };
 
-  // Celebration animation effect
   useEffect(() => {
-    const celebrationAnimation = document.querySelector('.celebration');
-    if (celebrationAnimation) {
-      celebrationAnimation.classList.add('animate-celebrate');
-      setTimeout(() => {
-        celebrationAnimation.classList.remove('animate-celebrate');
-      }, 3000); // Duration of celebration animation
-    }
+    fetchWinners();
   }, []);
 
   return (
-    <div className="bg-gradient-to-r from-yellow-100 to-orange-200 min-h-screen py-10">
-      <div className="container mx-auto">
-        <h1 className="text-4xl font-bold mb-6 text-center text-purple-700 celebration">Winners 🎉</h1>
-        <Slider {...settings}>
-          {winners.map((winner, index) => (
-            <div
-              key={index}
-              className="bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl mx-2" // Added margin here
-            >
-              <div className="flex justify-center mb-4">
-                {winner.gender === "male" ? (
-                  <FaUserTie className="text-blue-600 w-24 h-24" />
-                ) : (
-                  <GiFemale className="text-pink-600 w-24 h-24" />
-                )}
+    <div className="min-h-screen py-10" style={{ backgroundColor: 'transparent' }}>
+      <div className="container mx-auto px-4">
+      <h1
+  className="text-5xl font-extrabold text-gray-800 mb-10 text-center drop-shadow-lg transition-all duration-500 transform hover:scale-105"
+  style={{
+    animation: 'fadeIn 1s ease-out, bounceIn 1.5s ease-in-out'
+  }}
+>
+  Winners
+</h1>
+
+        {loading ? (
+          <div className="text-center text-lg text-gray-600">Loading...</div>
+        ) : error ? (
+          <p className="text-center text-red-500">{error}</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {winners.map((winner) => (
+              <div
+                key={winner._id}
+                className="card bg-white bg-opacity-70 border border-yellow-300 p-6 shadow-lg rounded-lg flex flex-col items-center transition-transform duration-300 hover:scale-105 hover:shadow-xl"
+                style={{ borderRadius: '0px 30px 30px 0px', height: '300px', width: '200px' }}
+              >
+                <h3 className="text-2xl font-bold text-center mb-2 text-blue-600 drop-shadow-md">
+                  Won {winner.prize}
+                </h3>
+                <img
+                  src={`http://localhost:5000/${winner.image}`}
+                  alt={`${winner.name} photo`}
+                  className="mb-4 w-32 h-32 rounded-full object-cover border-2 border-yellow-200"
+                />
+                <p className="text-lg text-center font-semibold text-gray-800 drop-shadow-md">
+                  {winner.name}
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-blue-600 text-center">{winner.name}</h3>
-              <p className="text-center text-gray-700">Won: <span className="font-semibold">{winner.lottery}</span></p>
-              <p className="text-center text-lg font-bold text-green-500">Prize: <span>{winner.prize}</span></p>
-            </div>
-          ))}
-        </Slider>
+            ))}
+          </div>
+        )}
       </div>
-
-      {/* CSS for animations */}
-      <style jsx>{`
-        @keyframes celebrate {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.1); }
-          100% { transform: scale(1); }
-        }
-
-        .animate-celebrate {
-          animation: celebrate 1s ease-in-out infinite;
-        }
-
-        .animate-fadeIn {
-          animation: fadeIn 0.5s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-      `}</style>
     </div>
   );
 };

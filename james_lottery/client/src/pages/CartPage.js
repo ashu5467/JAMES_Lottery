@@ -1,9 +1,11 @@
 import { useEffect, useState, useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import { FaShoppingCart } from "react-icons/fa";
+import { useAuth } from "../context/AuthContext";
 
 const CartPage = () => {
   const { cartItems, removeFromCart, updateCartQuantity } = useContext(CartContext);
+  const { userId } = useAuth();
   const [totalAmount, setTotalAmount] = useState(0);
 
   // Calculate total amount whenever cartItems changes
@@ -23,10 +25,33 @@ const CartPage = () => {
     updateCartQuantity(id, newQuantity); // Assuming your context provides an updateCartQuantity function
   };
 
-  const handleCheckout = () => {
-    alert("Proceeding to checkout...");
-    // Handle the checkout process
+  const handleCheckout = async () => {
+    
+    try {
+      const response = await fetch('http://localhost:5000/api/checkout', { // Ensure this URL is correct
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId,cartItems }),
+      });
+      const result = await response.json();
+      {console.log(userId)}
+  
+      if (response.ok) {
+        alert("Purchase successful!");
+        // Clear cart and redirect to profile or reload history if in profile page
+        // resetCart();  // Assuming you have a function in context to clear the cart
+        // Optionally, navigate to profile page here if not already there
+      } else {
+        alert("Error during purchase: " + result.message);
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      alert("An error occurred. Please try again.");
+    }
   };
+  
+
+
 
   return (
     <div className="container mx-auto py-10">
@@ -46,7 +71,7 @@ const CartPage = () => {
         <div className="space-y-6">
           {cartItems.map((item) => (
             <div
-              key={item.id}
+              key={item._id}
               className="flex justify-between items-center bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl"
             >
               <div>
@@ -59,7 +84,7 @@ const CartPage = () => {
               <div className="flex items-center space-x-4">
                 <button
                   className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
-                  onClick={() => handleRemoveFromCart(item.id)}
+                  onClick={() => handleRemoveFromCart(item._id)}
                 >
                   Remove
                 </button>

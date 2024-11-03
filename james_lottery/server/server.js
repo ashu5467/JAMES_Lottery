@@ -6,6 +6,8 @@ const userRoutes = require('./routes/userRoutes');
 const resultRoutes = require('./routes/resultRoutes');
 const winnerRoutes = require('./routes/winnerRoutes');
 const authRoutes = require('./routes/authRoutes');
+const ticketRoutes = require('./routes/ticketRoutes');
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -14,7 +16,9 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: '*', // This allows requests from any origin
+}));
 app.use(express.json());
 
 // Routes
@@ -23,6 +27,14 @@ app.use('/api/users', userRoutes);
 app.use('/api/results', resultRoutes);
 app.use('/api/winners', winnerRoutes);
 app.use("/api/auth", authRoutes);
+app.use('/uploads', express.static('uploads'));
+app.use('/api/tickets', ticketRoutes);
+app.use('/api', ticketRoutes);
+app.use('/api', lotteryRoutes);
+app.use('/api', lotteryRoutes);
+app.use('/api/lotteries', lotteryRoutes); // Use only this to avoid conflicts
+
+
 
 // Start server
 app.listen(PORT, () => {
