@@ -4,6 +4,7 @@ import { FaTicketAlt } from "react-icons/fa";
 import { CartContext } from "../context/CartContext"; // Import CartContext
 import LotterySelectionPage from './LotterySelectionPage'; // Import the new LotterySelectionPage
 import { Link } from 'react-router-dom'; // Import Link for navigation
+import { useTranslation } from 'react-i18next';
 
 const LotteriesPage = () => {
   const { addToCart } = useContext(CartContext); // Use context to manage cart
@@ -83,7 +84,7 @@ const LotteriesPage = () => {
                       <p className="text-lg text-center mb-2" style={{ fontFamily: 'Cinzel, serif' }}>
                         Win First Prize!
                       </p>
-                      <p className="text-3xl font-bold text-green-600 text-center mb-4">{`$${lottery.prize}`}</p>
+                      <p className="text-3xl font-bold text-green-600 text-center mb-4">{` ৳${lottery.prize}`}</p>
                       <button
                         className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white w-full px-4 py-2 rounded-lg transform transition-transform duration-200 hover:scale-105"
                         onClick={() => handleSelectLottery(lottery)}

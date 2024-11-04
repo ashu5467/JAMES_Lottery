@@ -3,6 +3,7 @@ import w1 from '../assets/w1.jpeg';
 import w2 from '../assets/w2.jpeg';
 import w3 from '../assets/w3.jpeg';
 import w4 from '../assets/w4.jpeg';
+import { useTranslation } from 'react-i18next';
 
 // Sample data for winners (this could come from an API or context)
 const winners = [
@@ -12,12 +13,14 @@ const winners = [
   { id: 4, name: "Alex Johnson", prize: "10 Lakh", photo: w4 },
 ];
 
+
 const TicketWinners = () => {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen py-10" style={{ backgroundColor: 'transparent' }}>
       <div className="container mx-auto px-4">
         <h1 className="text-5xl font-extrabold text-gray-800 mb-10 text-center drop-shadow-lg">
-          Winners
+          {t('Winners')}
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {winners.map(winner => (
@@ -27,7 +30,7 @@ const TicketWinners = () => {
               style={{ borderRadius: '0px 30px 30px 0px', height: '300px', width: '200px' }} // Adjust height and width as needed
             >
               <h3 className="text-2xl font-bold text-center mb-2 text-blue-600 drop-shadow-md">
-                Won {winner.prize}
+                {t('Won')} {winner.prize}
               </h3>
               <img
                 src={winner.photo}

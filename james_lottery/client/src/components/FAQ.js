@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const FAQ = () => {
   const [expandedQuestion, setExpandedQuestion] = useState(null);
+  const { t } = useTranslation();
+  
 
   const faqs = [
     {
@@ -41,7 +44,7 @@ const FAQ = () => {
   return (
     <section className="bg-gradient-to-r from-pink-500 to-red-500 text-white py-16">
       <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-extrabold text-center mb-8">Frequently Asked Questions</h2>
+        <h2 className="text-4xl font-extrabold text-center mb-8">{t('Frequently Asked Questions')}</h2>
         <div className="space-y-4">
           {faqs.map((faq, index) => (
             <div key={index} className="bg-white text-gray-800 rounded-lg shadow-lg p-6 transition-transform duration-300 transform hover:scale-105">

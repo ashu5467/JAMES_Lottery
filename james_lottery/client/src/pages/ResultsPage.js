@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const ResultsPage = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [results, setResults] = useState([]); // Store all results
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false); // Loading state
+  
 
   // Function to fetch all results
   const fetchAllResults = async () => {

@@ -5,6 +5,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css"; // Import Slick styles
 import TicketWinners from '../components/TicketWinners'; // Corrected path
 import { useEffect , useState} from "react";
+import { useTranslation } from 'react-i18next';
 
 import banner1 from '../assets/b1.jpg'; // Import your banner images
 import banner2 from '../assets/b2.jpg';
@@ -23,6 +24,8 @@ import ban2 from '../assets/ban2.png';
 import ban3 from '../assets/ban3.jpg'
 
 const HomePage = () => {
+
+  const { t } = useTranslation();
   // Slider settings
   const settings = {
     dots: true,
@@ -62,13 +65,13 @@ const HomePage = () => {
     {
       name: 'John Doe',
       image: 'path_to_image.jpg', // Replace with actual image path
-      prize: '$10,000',
+      prize: ' ৳10,000',
       ticketNumber: 'Ticket #12345',
     },
     {
       name: 'Jane Smith',
       image: 'path_to_image.jpg',
-      prize: '$5,000',
+      prize: ' ৳5,000',
       ticketNumber: 'Ticket #54321',
     },
     // Add more winners as needed
@@ -126,7 +129,7 @@ const HomePage = () => {
   {/* How to Play Section */}
   <div className="w-full md:w-1/2 px-4 mb-8 flex flex-col"> {/* Added flex and flex-col */}
     <h2 className="text-5xl font-extrabold text-blue-800 mb-8 text-center uppercase tracking-wide animate-fadeIn">
-      How to Play
+      {t('How to Play')}
     </h2>
     <div
       className="flex-grow p-10 rounded-xl shadow-lg animate-fadeIn text-gray-900 border border-opacity-10 border-gray-300" // Added flex-grow
@@ -135,10 +138,10 @@ const HomePage = () => {
       }}
     >
       <ol className="list-decimal list-inside space-y-6 text-2xl font-bold tracking-wider">
-        <li className="hover:text-pink-600 transition duration-300 ease-in-out">Select a lottery.</li>
-        <li className="hover:text-pink-600 transition duration-300 ease-in-out">Pick your numbers or use the auto-pick option.</li>
-        <li className="hover:text-pink-600 transition duration-300 ease-in-out">Add to cart and purchase tickets.</li>
-        <li className="hover:text-pink-600 transition duration-300 ease-in-out">Wait for the draw and check the results!</li>
+        <li className="hover:text-pink-600 transition duration-300 ease-in-out">{t('Select a lottery.')}</li>
+        <li className="hover:text-pink-600 transition duration-300 ease-in-out">{t('Pick your numbers or use the auto-pick option.')}</li>
+        <li className="hover:text-pink-600 transition duration-300 ease-in-out">{t('Add to cart and purchase tickets.')}</li>
+        <li className="hover:text-pink-600 transition duration-300 ease-in-out">{t('Wait for the draw and check the results!')}</li>
       </ol>
     </div>
 
@@ -154,7 +157,7 @@ const HomePage = () => {
   <div className="w-full md:w-1/2 px-4 mb-8 flex flex-col"> {/* Added flex and flex-col */}
     <section className="flex flex-col h-full"> {/* Added flex-col and h-full to make it take full height */}
       <h2 className="text-5xl font-extrabold text-blue-800 mb-8 text-center uppercase tracking-wide animate-fadeIn">
-        Latest Result 
+        {t('Latest Result')} 
       </h2>
       
       <div
@@ -173,7 +176,7 @@ const HomePage = () => {
             to="/results"
             className="bg-gradient-to-r from-purple-500 to-purple-700 text-white px-8 py-3 rounded-lg text-lg font-bold hover:opacity-90 transition drop-shadow-lg" 
           >
-            View Results
+            {t('View Results')}
           </Link>
         </div>
       </div>

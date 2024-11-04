@@ -2,9 +2,10 @@ import { useEffect, useState, useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import { FaShoppingCart } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from 'react-i18next';
 
 const CartPage = () => {
-  const { cartItems, removeFromCart, updateCartQuantity } = useContext(CartContext);
+  const { cartItems, removeFromCart, updateCartQuantity , clearCart } = useContext(CartContext);
   const { userId } = useAuth();
   const [totalAmount, setTotalAmount] = useState(0);
 
@@ -39,7 +40,7 @@ const CartPage = () => {
       if (response.ok) {
         alert("Purchase successful!");
         // Clear cart and redirect to profile or reload history if in profile page
-        // resetCart();  // Assuming you have a function in context to clear the cart
+         clearCart();  // Assuming you have a function in context to clear the cart
         // Optionally, navigate to profile page here if not already there
       } else {
         alert("Error during purchase: " + result.message);
@@ -76,7 +77,7 @@ const CartPage = () => {
             >
               <div>
                 <h3 className="text-xl font-bold text-blue-800">{item.name}</h3>
-                <p className="text-gray-600">Price: ${item.price}</p>
+                <p className="text-gray-600">Price:  ৳{item.price}</p>
                 <p className="text-gray-600">Quantity: {item.quantity}</p>
 
                
@@ -99,7 +100,7 @@ const CartPage = () => {
           ))}
 
           <div className="text-right mt-4">
-            <h2 className="text-2xl font-bold text-blue-800">Total: ${totalAmount}</h2>
+            <h2 className="text-2xl font-bold text-blue-800">Total:  ৳{totalAmount}</h2>
             <button
               className="bg-green-500 text-white px-6 py-3 rounded mt-4 hover:bg-green-700 transition-colors"
               onClick={handleCheckout}

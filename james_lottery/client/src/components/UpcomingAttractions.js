@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import { FaTicketAlt } from 'react-icons/fa'; // Importing ticket icon
-import { CartContext } from '../context/CartContext';
+//import { CartContext } from '../context/CartContext';
+import { CartContext } from "../context/CartContext";
 import { fetchLotteries } from '../services/lotteryService';
 import { Carousel } from 'react-responsive-carousel';
+import { useTranslation } from 'react-i18next';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const UpcomingAttractions = () => {
   const { addToCart } = useContext(CartContext);
   const [lotteries, setLotteries] = useState([]);
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate(); // Hook to navigate programmatically
 
@@ -28,7 +31,7 @@ const UpcomingAttractions = () => {
     fetchLotteryData();
   }, []);
 
-  const handleAddToCart = (lottery, redirectToCart = false) => {
+  const handleAddToCart = (lottery, redirectToCart = true) => {
     addToCart(lottery);
     if (redirectToCart) {
       navigate('/cart'); // Navigate to cart page after adding to cart
@@ -36,13 +39,13 @@ const UpcomingAttractions = () => {
   };
 
   if (loading) {
-    return <div className="text-center text-white">Loading lotteries...</div>;
+    return <div className="text-center text-white">{t('Loading lotteries...')}</div>;
   }
 
   return (
     <section className="mb-16">
       <h2 className="text-5xl font-extrabold text-yellow-300 mb-8 text-center" style={{ fontFamily: 'Cinzel, serif' }}>
-        Upcoming Attractions
+        {t('Upcoming Attractions')}
       </h2>
       <div className="relative flex justify-center">
         <Carousel
@@ -64,26 +67,26 @@ const UpcomingAttractions = () => {
                 {lottery.name}
               </h3>
               <p className="text-lg text-center mb-2" style={{ fontFamily: 'Cinzel, serif' }}>
-                Win First Prize!
+                {t('Win First Prize!')}
               </p>
-              <p className="text-3xl font-bold text-green-600 text-center mb-4">{`$${lottery.prize}`}</p>
+              <p className="text-3xl font-bold text-green-600 text-center mb-4">{` ৳${lottery.prize}`}</p>
               <button
                 onClick={() => handleAddToCart(lottery)}
                 className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white w-full px-4 py-2 rounded-lg transform transition-transform duration-200 hover:scale-105"
               >
-                Add to Cart
+                {t("Add to Cart")}
               </button>
               <div className="border-t-2 border-dashed my-4 border-gray-300"></div>
               <button
                 onClick={() => handleAddToCart(lottery, true)} // Redirect to cart after adding
                 className="bg-gradient-to-r from-green-400 to-green-600 text-white w-full px-4 py-2 rounded-lg inline-block transform transition-transform duration-200 hover:scale-105"
               >
-                <FaTicketAlt className="inline mr-2" /> Buy Now
+                <FaTicketAlt className="inline mr-2" /> {t('Buy Now')}
               </button>
               <p className="text-xs text-center text-gray-600 mt-2" style={{ fontFamily: 'Cinzel, serif' }}>
-                Draw Date: {lottery.startDate} <br />
-                Time: {lottery.time} <br />
-                Price: <span className="font-bold text-green-600">${lottery.price}</span>
+                {t('Draw Date')}: {lottery.startDate} <br />
+                {t('Time')}: {lottery.time} <br />
+                {t('Price')}: <span className="font-bold text-green-600"> ৳{lottery.price}</span>
               </p>
             </div>
           ))}
@@ -95,7 +98,7 @@ const UpcomingAttractions = () => {
           to="/lotteries"
           className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-6 py-3 rounded-lg inline-block text-lg font-bold hover:opacity-90 transition"
         >
-          View All
+         {t('View All')}
         </Link>
       </div>
 

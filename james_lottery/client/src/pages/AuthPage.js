@@ -3,9 +3,10 @@ import { FaUser, FaLock } from "react-icons/fa";
 import axios from "axios";
 import { useAuth } from '../context/AuthContext'; // Import the Auth context
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useTranslation } from 'react-i18next';
 
 const AuthPage = () => {
-  const { isLoggedIn, username, login, logout } = useAuth(); // Correctly access context values
+  const { isLoggedIn, username, login, logout } = useAuth(); // Access context values
   const navigate = useNavigate(); // Initialize navigate
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ const AuthPage = () => {
     password: "",
     email: "", // Only needed for registration
   });
+  const [message, setMessage] = useState(""); // State for messages
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,12 +29,15 @@ const AuthPage = () => {
       if (isLogin) {
         // Login with response
         login({ id: response.data.userId, username: formData.username, token: response.data.token });
+        setMessage(`Welcome back, ${formData.username}!`); // Welcome message on login
         navigate("/", { state: { username: formData.username } });
       } else {
-        setIsLogin(true);
+        setMessage("Registration successful! Please log in."); // Message on registration
+        setIsLogin(true); // Switch to login mode
       }
     } catch (error) {
       console.error("Error:", error.response ? error.response.data : error.message);
+      setMessage("An error occurred. Please try again."); // General error message
     }
   };
 
@@ -60,6 +65,7 @@ const AuthPage = () => {
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-500 to-purple-500">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-3xl font-bold text-center mb-6">{isLogin ? "Login" : "Register"}</h2>
+        {message && <p className="text-center text-green-500 mb-4">{message}</p>} {/* Display messages */}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>

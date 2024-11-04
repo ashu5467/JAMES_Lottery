@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FaCartPlus } from "react-icons/fa";
 import bannerImage from '../assets/cartImg.jpeg';
 import axios from 'axios'; // Make sure you have axios installed
+import { useTranslation } from 'react-i18next';
 
 // Helper function to calculate days until the draw date
 const calculateDaysUntilDraw = (drawDate) => {
@@ -105,10 +106,16 @@ useEffect(() => {
     alert(`Added ${summary.length} items to cart!`);
   };
 
-  const handleRemoveFromSummary = (ticketNumber) => {
-    const newSummary = summary.filter(item => item.ticketNumber !== ticketNumber);
+  // const handleRemoveFromSummary = (ticketNumber) => {
+  //   const newSummary = summary.filter(item => item.ticketNumber !== ticketNumber);
+  //   setSummary(newSummary);
+  // };
+
+  const handleRemoveFromSummary = (ticketNumber, lotteryName) => {
+    const newSummary = summary.filter(item => item.ticketNumber !== ticketNumber || item.name !== lotteryName);
     setSummary(newSummary);
   };
+  
 
   const handleLoadMoreTickets = () => {
     setTicketsToShow((prev) => prev + 20); // Increase tickets to show by 20
@@ -129,7 +136,7 @@ useEffect(() => {
               {selectedLotteries.map((lottery, index) => (
                 <div key={lottery._id} className="bg-transparent p-6 rounded-lg shadow-xl border-2 border-gray-300">
                   <h3 className="text-2xl font-bold mb-2 text-blue-800">{lottery.name}</h3>
-                  <p className="text-gray-600 mb-4">Price: <span className="text-green-600 font-bold">${lottery.price}</span></p>
+                  <p className="text-gray-600 mb-4">Price: <span className="text-green-600 font-bold"> ৳{lottery.price}</span></p>
                   <p className="text-md text-gray-500 mb-4">Draw Date: <span className="font-semibold">{lottery.drawDate}</span></p>
                   <p className="text-md text-gray-500 mb-4">
                     Quantity:
@@ -195,9 +202,9 @@ useEffect(() => {
                         <td className="py-2 px-4 border">{item.name}</td>
                         <td className="py-2 px-4 border">{item.ticketNumber}</td>
                         <td className="py-2 px-4 border">{item.quantity}</td>
-                        <td className="py-2 px-4 border">${item.total}</td>
+                        <td className="py-2 px-4 border"> ৳{item.total}</td>
                         <td className="py-2 px-4 border">
-                          <button onClick={() => handleRemoveFromSummary(item.ticketNumber)} className="text-red-500 hover:text-red-700">
+                          <button onClick={() => handleRemoveFromSummary(item.ticketNumber , item.name)} className="text-red-500 hover:text-red-700">
                             Remove
                           </button>
                         </td>
@@ -206,7 +213,7 @@ useEffect(() => {
                   </tbody>
                 </table>
                 <div className="text-right mt-4">
-                  <strong className="text-lg">Total Price: ${calculateTotalPrice()}</strong>
+                  <strong className="text-lg">Total Price:  ৳{calculateTotalPrice()}</strong>
                 </div>
                 <button
                   onClick={handleAddToCart}

@@ -14,6 +14,7 @@ import { AuthProvider } from './context/AuthContext'; // Import the Auth provide
 import PrivateRoute from './components/PrivateRoute'; // Import the PrivateRoute
 import ProfilePage from "./components/ProfilePage";
 
+
 function App() {
   return (
     <AuthProvider>
